@@ -1,59 +1,69 @@
-# import random
-
+import re
+from corpus_loader import word_list, name_list
 # signature has their type, which might be a function that takes in nothing and returns nothing. The signature for encrypt is two arguments. one string in, and one string out
-def encrypt(plain, shift): # encrypt, needs a plain and key
-  encrypted_text = ""
-  
-  for char in plain:
 
-    num = int(char) #converting character into number
-    shifted_num = (num + shift)
-    encrypted_text += str(shifted_num)
-    
-    
-  
-  print(encrypted_text)
+letters_cap = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+letters_lower = "abcdefghijklmnopqrstuvwxyz"
 
+def encrypt(plain,shift): # encrypt, needs a plain and key
+  encrypted_message = ""
+  
+  for letter in plain:
+    if letter.isupper():
+      start_index = letters_cap.index(letter)
+      new_index = (start_index + shift) % 26
+      new_letter = letters_cap[new_index]
+      encrypted_message += new_letter
+    elif letter.islower():
+        start_index = letters_lower.index(letter)
+        new_index = (start_index + shift) % 26
+        new_letter = letters_lower[new_index]
+        encrypted_message += new_letter
+    else:
+      encrypted_message += letter
+  return encrypted_message
+
+
+    
+  #   if letter != " ":
+  #     if (letter.isupper()):
+  #       encrypted_message += chr((ord(letter) + shift-65) % 26 + 65)
+        
+  #     else:
+  #       encrypted_message += chr((ord(letter) + shift - 97) % 26 + 97)
+  #   else:
+  #     encrypted_message += " "
+  #   if not letter.isalpha():
+  #     encrypted_message += letter
+  # return encrypted_message
+      
 # encrypt("abc",1)
 
-# def decrypt(encoded, key):
-#   return encrypt(encoded, -key)
-    
+def decrypt(encoded, key):
+  return encrypt(encoded, -key)
 
 
+def count_words(text):
 
-if __name__ == "__main__":
-    pins = [
-        "ABC"
-        # "9876",
-        # "0000",
-        # "9999",
-    ]
+    crack_phrase = text.split()
 
-    # for pin in pins:
-    #     # key = random.randint(1, 9)
-    #     print("plain pin", pin, key)
-    #     encrypted_pin = encrypt(pin, key)
-    #     print("encrypted_pin", encrypted_pin)
-    #     # decrypted_pin = decrypt(encrypted_pin, key)
-    #     # print("decrypted_pin", decrypted_pin)
-        
+    word_count = 0
 
-# chars = ['0'...'9']
+    for crack_word in crack_phrase:
+        word = re.sub(r'[^A-Za-z]+','', crack_word)
+        if word.lower() in word_list or word in name_list:
+            # print("english word", word)
+            word_count += 1
 
+    return word_count
+  
+def crack(text):
+  for i in range(26):
+        cracked_text = decrypt(text, i)
+        word_count = count_words(cracked_text)
+        decimal = int(word_count / len(text.split()))
+        if decimal > .5:
+            return cracked_text
 
-# def encrypt(plain, key):
-#     encrypted_text = ""
+  return ''
 
-#     # 1234 -> 2345 with key of 1
-
-#     for char in plain:
-#         num = int(char)
-#         shifted_num = (num + key) % 10
-#         encrypted_text += str(shifted_num)
-
-#     return encrypted_text
-
-
-# def decrypt(encoded, key):
-#     return encrypt(encoded, -key)

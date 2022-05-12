@@ -1,11 +1,3 @@
-
-
-# nltk.download()
-# nltk.download('names', quiet=True)
-
-# nltk.download('words')
-# nltk.download('names')
-
 import nltk
 import ssl
 
@@ -16,7 +8,7 @@ except AttributeError:
 else:
     ssl._create_default_https_context = _create_unverified_https_context
 
-# nltk.download()
+
 from nltk.corpus import words, names
 nltk.download('words', quiet=True)
 nltk.download('names', quiet=True)
